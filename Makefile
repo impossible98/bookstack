@@ -4,8 +4,21 @@
 SHELL := /bin/bash
 YARN :=  $(shell which yarn)
 
+BIN_NAME := bookstack
+
 build:
 	cargo build --release
+	if [ -f "target/release/$(BIN_NAME)" ]; then \
+		if [ ! -d "dist" ]; then \
+			mkdir dist; \
+		fi; \
+		cp target/release/$(BIN_NAME) dist/$(BIN_NAME); \
+	fi
+
+# Clear the application
+.PHONY: clear
+clear: install
+	if [ -d "dist" ]; then rm -rf "dist"; fi
 
 dev:
 	cargo run
@@ -22,5 +35,7 @@ fmt: install
 .PHONY: install
 install:
 	@echo -e "\033[32mInstalling dependencies...\033[0m"
-	if [ ! -d "node_modules" ]; then $(YARN); fi
+	if [ ! -d "node_modules" ]; then \
+		$(YARN); \
+	fi
 	@echo -e "\033[32mDependencies installed.\033[0m"
