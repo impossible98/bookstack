@@ -1,4 +1,7 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use dotenv::dotenv;
+
+use std::env;
 
 #[get("/")]
 async fn hello() -> impl Responder {
@@ -16,14 +19,42 @@ async fn manual_hello() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    println!("Hello, world!");
-    HttpServer::new(|| {
-        App::new()
-            .service(hello)
-            .service(echo)
-            .route("/hey", web::get().to(manual_hello))
-    })
-    .bind(("127.0.0.1", 8080))?
-    .run()
-    .await
+    dotenv::dotenv().ok();
+
+    let mode = env::var("MODE").unwrap_or("development".to_string());
+    let port: u16 = env::var("PORT")
+        .unwrap_or("6969".to_string())
+        .parse()
+        .unwrap();
+
+    println!();
+    println!("  vite v2.9.12 dev server running at:");
+    println!();
+    println!("  > Local:    http://localhost:{}/", port);
+    println!("  > Network:  http://192.168.1.192:{}/", port);
+    println!();
+    println!("  ready in 473ms.");
+    println!();
+
+    if mode == "production" {
+        HttpServer::new(|| {
+            App::new()
+                .service(hello)
+                .service(echo)
+                .route("/hey", web::get().to(manual_hello))
+        })
+        .bind(("127.0.0.1", port))?
+        .run()
+        .await
+    } else {
+        HttpServer::new(|| {
+            App::new()
+                .service(hello)
+                .service(echo)
+                .route("/hey", web::get().to(manual_hello))
+        })
+        .bind(("0.0.0.0", port))?
+        .run()
+        .await
+    }
 }
