@@ -42,19 +42,20 @@ async fn main() -> std::io::Result<()> {
         .unwrap();
 
     let local_ip = local_ip().unwrap();
-    println!();
-    println!(
-        "  {} v2.9.12 dev server running at:",
-        global::global::BIN_NAME
-    );
-    println!();
-    println!("  > Local:    http://localhost:{}/", port);
-    println!("  > Network:  http://{}:{}/", local_ip, port);
-    println!();
-    println!("  ready in 473ms.");
-    println!();
 
     if mode == "development" {
+        println!();
+        println!(
+            "  {} v{} dev server running at:",
+            global::global::BIN_NAME,
+            global::global::VERSION
+        );
+        println!();
+        println!("  > Local:    http://localhost:{}/", port);
+        println!("  > Network:  http://{}:{}/", local_ip, port);
+        println!();
+        println!("  ready in 473ms.");
+        println!();
         run("0.0.0.0", port).await
     } else {
         run("127.0.0.1", port).await

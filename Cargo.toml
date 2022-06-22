@@ -7,5 +7,6 @@ edition = "2021"
 
 [dependencies]
 actix-web = "4"
+clap = "3.2.6"
 dotenv = "0.15.0"
 local-ip-address = "0.4.4"
