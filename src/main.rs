@@ -1,7 +1,8 @@
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
-use dotenv::dotenv;
-
 use std::env;
+
+mod global;
+
+use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 
 #[get("/")]
 async fn hello() -> impl Responder {
@@ -28,7 +29,10 @@ async fn main() -> std::io::Result<()> {
         .unwrap();
 
     println!();
-    println!("  vite v2.9.12 dev server running at:");
+    println!(
+        "  {} v2.9.12 dev server running at:",
+        global::global::BIN_NAME
+    );
     println!();
     println!("  > Local:    http://localhost:{}/", port);
     println!("  > Network:  http://192.168.1.192:{}/", port);
